@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="email=no" name="format-detection">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- <meta name="viewport" content="width=640,user-scalable=no,target-densitydpi=device-dpi"> -->
+    <title>storesList</title>
+</head>
+<body>
+    <div id="app" class="pg app" ontouchend="entTouchEnd()"></div>
+    <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
+   <script src="assets/app.js"></script>
+   <script>
+        //加载页面时执行一次
+        changeShow();
+        //监听浏览器宽度的改变
+        window.onresize = function(){
+            changeShow();
+        };
+        function changeShow(){
+            //获取网页可见区域宽度
+            var docWidth = document.body.clientWidth;
+            var app = document.getElementById('app');
+            var scaleBig = docWidth/960;
+            app.style.transform = 'scale('+scaleBig+')'
+        }
+        function entTouchEnd() {
+                if (window.parent && window.postMessage) {
+                    window.parent.postMessage({
+                        type:  'back',
+                        value: true
+                    }, '*')
+                }
+            } 
+   </script>
+    <!-- 埋点js -->
+</body> 
+</html> 
