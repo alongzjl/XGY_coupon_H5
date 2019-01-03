@@ -14,7 +14,7 @@ import CatgNew         	from '../StoreListNew/CatgNew'
 import PageNew         	from '../StoreListNew/PageNew'
 import ResetNew        	from '../StoreListNew/ResetNew' 
 import ListByStoreNew  	from '../StoreListNew/ListByStoreNew'
-
+import StoreDetailsBlock from '../StoreDetailsNew/StoreDetailsBlock'
 import addAnimate from '../../../page/animateAdd'
 
 import './index.less'
@@ -44,6 +44,7 @@ class Custom extends React.Component {
 				case 'pageByStore2' : compCon = (<PageNew data={_} type={`Style${styleIdx + 1}`} ioInput={ioInput} ioOuter={ioOuter} shopsInfo={shopsInfo} />);break
 				case 'resetByStore2' :  compCon = (<ResetNew data={_} type={`Style${styleIdx + 1}`} comp={comp} ioInput={ioInput} ioOuter={ioOuter} storeUpdate={storeUpdate} />);break
 				case 'listByStore2' : compCon = (<ListByStoreNew data={_} type={`Style${styleIdx + 1}`} ioInput={ioInput} ioOuter={ioOuter} shops={shopsInfo} storeUpdate={storeUpdate} />);break
+				case 'storeBlock' : compCon = (<StoreDetailsBlock data={_} type={`Style${styleIdx + 1}`} goodsDetails={ioInput} />);break
 			}
 			return (   
 				<div className={`pge-layout ${compName} ${aniCls? aniCls: ''}`} style={{...layout,...aniSty}} key={i}>{ compCon }</div> 

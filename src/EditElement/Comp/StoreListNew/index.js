@@ -31,28 +31,12 @@ class StoreListNew extends React.Component {
 			size = data.data.content.size || 12;
 		this.state.paramsData.size = size 
 		let paramsData = this.state.paramsData
-		if(query){
-			const floor = query['floor'] ? query['floor'] : '',
-				  catgFilter = query['type'] ? query['type'] : '',
-				  router = query['router'];
-			if(floor || catgFilter || router){
-				paramsData.floor = floor
-				paramsData.catgFilter = catgFilter
-				paramsData.router = router
-				this.setState({paramsData:paramsData},()=>{
-					this.getDataPost(paramsData,size);
-				})
-			}else{ 
-				this.getDataPost(paramsData,size);
-			} 
-		}else{ 
-			this.getDataPost(paramsData,size);
-		}
+		this.getDataPost(paramsData,size);
 	};
 	componentDidMount() { 
  		let { data } = this.props,
  		content = data.data.content;
- 		let size = content.size || 12;
+ 		let size = content.size || 9;
  	}      
 	//请求在线数据
 	getDataPost = (paramsData,size) => {
@@ -114,19 +98,40 @@ class StoreListNew extends React.Component {
 
 //在线店铺数据处理
 function storeListMake(paramsData,size){
-	let Url=configData.RYPostUrl.api + '/getShopList';
+	let Url=configData.RYPostUrl.api + '/getPreferentialList';
 	return new Promise((resolve, reject) => {
 		Fetch.default.postJSON(Url,{
 			mallId:configData.mallId,
-			categoryId:paramsData.catg,
-			floorId:paramsData.floor,
-			currentPage:paramsData.currentPage,
-			pageSize:size,
-			mallNameFirstLetter:paramsData.letter
+			promotionCategoryId:paramsData.catg
 		}).then(res=>{
 			if (res.meta.errno == 0) {
-				const list = res.result ? res.result.data : [];
-				let page = res.result ? res.result.page : {totalPage:1,totalCount:1};
+				let list = res.result ? res.result.data : [];
+				list = [{
+					Name:'alongfsf',
+					Photo:'http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031616585257/1901031616585234.png',
+					EndTime:'2018/12/31 11:28:43',
+					StartTime:'2018/12/31 11:28:43',
+					SubTitle:'防守打法接收到福建省的路口附近 反倒是减肥is 发不打算减肥'
+				},{
+					Name:'alongfsf',
+					Photo:'http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031616585257/1901031616585234.png',
+					EndTime:'2018/12/31 11:28:43',
+					StartTime:'2018/12/31 11:28:43',
+					SubTitle:'防守打法接收到福建省的路口附近 反倒是减肥is 发不打算减肥'
+				},{
+					Name:'alongfsf',
+					Photo:'http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031616585257/1901031616585234.png',
+					EndTime:'2018/12/31 11:28:43',
+					StartTime:'2018/12/31 11:28:43',
+					SubTitle:'防守打法接收到福建省的路口附近 反倒是减肥is 发不打算减肥'
+				},{
+					Name:'alongfsf',
+					Photo:'http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031616585257/1901031616585234.png',
+					EndTime:'2018/12/31 11:28:43',
+					StartTime:'2018/12/31 11:28:43',
+					SubTitle:'防守打法接收到福建省的路口附近 反倒是减肥is 发不打算减肥'
+				}]
+				let page =/* res.result ? res.result.page : */{totalPage:1,totalCount:4};
 				let newArr = ArrMake(size,page,paramsData,list);
 				resolve({msg:'success',data:newArr}) 
 			}else{
@@ -155,7 +160,7 @@ function ArrMake(size,page,paramsData,list){
 			} 
 		}
 		return item
-	})   
+	})  
 	return newArr
 }
 export default StoreListNew

@@ -34,8 +34,6 @@ export default class Fetch {
 	}
 
 	static get(url, config) {
-		let id = window.uif.userInfo.id || '1'
-		if (id) url += ((/\?/.test(url)? '&': '?') + 'userId='+id)
 		return new Promise((resolve, reject) => {
 			const newConfig = Object.assign({}, {
 				method: 'GET'

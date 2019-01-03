@@ -3,7 +3,8 @@
 
 import React        from 'react'
 import { Router, Route, hashHistory } from 'react-router'
-import EditElementCommon from './page/pageCommon'
+import EditElementFirst from './page/page_1'
+import EditElementSecond from './page/page_2'
 import dataChange from './test'
 
 window.RY_interent = true;
@@ -17,10 +18,6 @@ export default class RouterRY extends React.Component {
 	 	    
 		setTimeout(()=>{
 			dataChange() 
-			if(location.hash.indexOf('stores') == -1){
-				location.href = location.href + `#/stores`; 
-			} 
-			window.allPages = configData.pageContent; 
 			configData.pageContent.map(item=>{
 				item.elements = JSON.parse(item.elements)
 				return item
@@ -28,7 +25,6 @@ export default class RouterRY extends React.Component {
 			if(this.state.first){
 					this.setState({to:true,first:0});
 				} 
-			window.RYCityName = configData.cityName;
 		},100)  
 	}        
   render() {
@@ -37,7 +33,8 @@ export default class RouterRY extends React.Component {
 				{
 					this.state.to ?  
 					<Router history={hashHistory}> 
-						<Route path="stores" component={EditElementCommon} /> 
+						<Route path="coupon" component={EditElementFirst} />
+						<Route path="details" component={EditElementSecond} /> 
 					</Router> : null
 				}
 			</div>  

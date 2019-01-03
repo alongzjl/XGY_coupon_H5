@@ -1,6 +1,9 @@
 //数据映射
-export default function RYdataMap(item){
+export default function RYdataMap(item,type){
 	let obj = item;
+	if(type == 'NewStore' || type == 'storeDetails'){
+		obj.berthNumber = item.EndTime&&item.StartTime ? `有效期: ${item.StartTime.substr(0,10)}-${item.EndTime.substr(0,10)}` : ''
+	}
 	Object.keys(item).map(val=>{
 		switch(val){ 
 			case 'logo' : !item[val] ? obj[val]  = './image/no_store.png' : null;break
@@ -12,6 +15,6 @@ export default function RYdataMap(item){
  			case 'RECOMMEND' : obj['recommend'] = item[val];
  			break
 		}  
-	})       
+	})
 	return obj 
 }

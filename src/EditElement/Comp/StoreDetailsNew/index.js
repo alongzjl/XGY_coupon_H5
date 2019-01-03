@@ -6,65 +6,45 @@
 
 import React from 'react'
 import './index.less'
-import RNMsgChannel from 'react-native-webview-messaging'
 import checkToJump from '../../checkToJump'
 import Custom from '../Custom'
+import { postJSON } from '../Common/RYAjax'
 
 class StoreDetailsNew extends React.Component {
 	state = {
-		shopDetais:[{NAME:'',LOCAL_LOGO:'',BERTH_NUMBER:'',CONTACT:'',LOCAL_URL:[{LOCAL_URL:''}],DESCRIPTION:''}],
-		first:0
-	}
-	componentWillMount() {
-		let { query } = this.props;
-		if(query.params){
-			const params = JSON.parse(query.params)
-			params['store'] ? RNMsgChannel.emit('RY_shopParams',{id:params['store'],currentPage:1}) : null;
-		}
+		shopDetais:{}
 	}
 	componentDidMount(){
 		let { query } = this.props;
-		if(query.params){
-			const params = JSON.parse(query.params)
-			RNMsgChannel.on('RY_shops', data => {
-				const first = this.state.first + 1
-				first<=2&&params['store'] ? this.setState({
-					shopDetais:data.data[0],
-					first:first
-				}) : null
-			});
+		if(query&&query.PromotionID){
+			let Url=configData.RYPostUrl.api + '/getPreferentialDetail';
+			this.postData(Url,query.PromotionID)
 		}
 	}
-	shouldComponentUpdate(nextProps,nextState){
-		let { query } = nextProps;
-		if(query.params){
-			return nextState.first == 1 ? true : false
-		}else{
-			return true
-		}
-	}
+	//请求数据
+	postData = (Url,PromotionID) => {
+		postJSON(Url,{mallId:configData.mallId,promotionId:PromotionID}).then(res=>{
+			//if(res.msg == 'success'){
+				let shopDetais = res.data ? res.data.data : {}
+				shopDetais = {
+					Name:'alongfsf',
+					Photo:'http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031616585257/1901031616585234.png',
+					EndTime:'2018/12/31 11:28:43',
+					StartTime:'2018/12/31 11:28:43',
+					SubTitle:'防守打法接收到福建省的路口附近 反倒是减肥is 发不打算减肥',
+					Article:'<h1>fsdfsdfsdfsd发送到</h1>'
+				}
+				this.setState({shopDetais:shopDetais})
+				
+			//}
+		})
+	} 
 	render() { 
-		let { data, query,animate,animateParams,page } = this.props;
-		let shopDetais = query.detail ? JSON.parse(query.detail) : this.state.shopDetais[0];
-		if(query.params&&this.state.first == 0){
-			return false
-		}
-		let comp  = data.data.components;
-		data.data.components = comp.map(item=>{
-			if(item.name == 'button'){
-				let queryData = checkToJump(shopDetais,item.data.content.router.url)
-				item.data.content.router.RYDetail = queryData
-			}
-			return item
-		}) 
-		let ioInput = {itemDetails:shopDetais,mapParams:{}}
+		let { data } = this.props;
 		return (   
 			<Custom
 				data={data}
-				animate={animate}
-				animateParams={animateParams}
-				page={page}
-				ioInput={ioInput}
+				ioInput={this.state.shopDetais}
 			/>  
 		)
 	}

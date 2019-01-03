@@ -12,7 +12,7 @@ import aniTime from '../../common/aniTime'
 import './index.less'
 import 'swiper/dist/css/swiper.css'
 
-
+import { hashHistory } from 'react-router'
 
 class ListByStoreNew extends React.Component {
 	state = {
@@ -61,13 +61,13 @@ class ListByStoreNew extends React.Component {
 		this.myStoreSwiper = new Swiper(`.swiper-container_store_${random}`, swiperOptions)
 	}
 	toDetails = item => {
-		let { ioInput } = this.props;
-		if (window.parent && window.postMessage) {
-			window.parent.postMessage({
-				type:  'toDetails',
-				value: {router:ioInput.router,details:item}
-			}, '*')
-		}
+		debugger
+		 hashHistory.push({
+                pathname: `/details`,
+                query: { 
+                    detail: item.PromotionID, 
+                }   
+            });  
 	}      
 	end = e =>{
 		e.target.style.opacity = 1;

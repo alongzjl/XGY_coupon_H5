@@ -7,7 +7,7 @@ export default function OneNewActive({ ioInput,data,item,styleObj,type }){
 		{ catg,floor,letter,currentPage,catgByWon } = ioInput,
 		cl = [],everyId,isAV;
 	switch(type){
-		case 'CatgNew'  :  everyId = item.id;isAV = everyId == catg;break
+		case 'CatgNew'  :  everyId = item.ActivityCategoryID;isAV = everyId == catg;break
 		case 'CatgByWon'  :  everyId = item.id;isAV = everyId == catgByWon;break
 		case 'FloorNew' :  everyId = item.id;isAV = everyId == floor;break
 		case 'LetterNew':  everyId = item.name;isAV = everyId == letter;break

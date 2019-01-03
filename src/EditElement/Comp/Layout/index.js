@@ -24,7 +24,7 @@ export default class Layout extends React.Component {
 	render() { 
 		let { data,styleObj,itemList,type,realIndex } = this.props
 		let components = data.data.componentLayout
-		itemList ? itemList = RYdataMap(itemList) : null;
+		itemList ? itemList = RYdataMap(itemList,type) : null;
 		let childNode = components.map((_, i) => {
 			let compName = _.name, 
 				layout   = _.data.layout,
@@ -85,7 +85,10 @@ function filterStr(type,contentBind,itemList,data){
 	switch(type){   
 		case 'recom' : contentBind=='name' ? contentBind = 'commodityName' : null
 			data.data.content.text = contentBind&&itemList[contentBind] ? itemList[contentBind] : ''
-		break   
+		break 
+		case 'CatgNew' :  contentBind=='name' ? contentBind = 'Name' : null 
+			data.data.content.text = contentBind&&itemList[contentBind] ? itemList[contentBind] : ''
+		break
 		default : data.data.content.text = contentBind&&itemList[contentBind] ? itemList[contentBind] : ''
 		break 
 	}

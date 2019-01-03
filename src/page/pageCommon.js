@@ -10,7 +10,7 @@ import React from 'react'
 
 import StoreListNew   from '../EditElement/Comp/StoreListNew'
 import Picture   from '../EditElement/Picture'
-
+import StoreDetailsNew   from '../EditElement/Comp/StoreDetailsNew'
 import addAnimate from './animateAdd'
 import './index.less'
 
@@ -19,16 +19,21 @@ class EditElementCommon extends React.Component {
   	name:'',
   	page:''
   }
-  componentWillMount() {
-  		let toPage =  configData.pageContent;
-  		if(!toPage[0].animation){
+  componentWillMount() { 
+  		let toPage =  configData.pageContent[0];
+  		if(this.props.path == 'coupon'){
+  			toPage =  configData.pageContent[0];
+  		}else if(this.props.path == 'details'){
+  			toPage =  configData.pageContent[1];
+  		}
+  		if(!toPage.animation){
 	  		const animationStr = {
 	  			in:{className: '',direction: '',delay: 0,duration: 1,iterationCount: 1},
 	  			out:{className: '',direction: '',delay: 0,duration: 1,iterationCount: 1}
 	  		}
-	  		toPage[0].animation = JSON.stringify(animationStr)
+	  		toPage.animation = JSON.stringify(animationStr)
 	  	}
-	  	this.setState({page:toPage[0]})
+	  	this.setState({page:toPage})
 	}
   	leaveAnimate = () => {
   		const objAn = JSON.parse(this.state.page.animation);
@@ -41,7 +46,7 @@ class EditElementCommon extends React.Component {
 			eles   = page.elements.length > 0 ? page.elements : [],
 			feature = JSON.parse(page.feature),   
 			color  = feature.backgroundColor, 
-			query = this.props.location.query,
+			query = this.props.query,
 			animateParams   =   JSON.parse(page.animation);
 		let bgStyle   = { backgroundColor: color.color };
  		const pageInAnimate = addAnimate(animateParams.in);
@@ -60,6 +65,7 @@ class EditElementCommon extends React.Component {
 				              switch (element.name) {
 				              	case "picture" : compCon = (<Picture data={element} type={`Style${styleIdx + 1}`} />); break
 							 	case "storeList2" : compCon = (<StoreListNew data={element} type={`Style${styleIdx + 1}`} query={query} />); break
+							 	case "storeDetails2" : compCon = (<StoreDetailsNew data={element} type={`Style${styleIdx + 1}`} query={query} />); break
 							 	default: ; break
 						 }
 						 return (

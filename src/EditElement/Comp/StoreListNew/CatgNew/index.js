@@ -13,7 +13,7 @@ export default class CatgNew extends React.Component {
 		update:false
 	}
 	componentDidMount(){
-		let Url=configData.RYPostUrl.api + '/getCategoryList';
+		let Url=configData.RYPostUrl.api + '/getPreferentialCategroyList';
 		this.postData(Url)
 	}
 	//筛选店铺
@@ -31,18 +31,9 @@ export default class CatgNew extends React.Component {
 		postJSON(Url,{mallId:configData.mallId}).then(res=>{
 			if(res.msg == 'success'){
 				let dataCatgs = res.data ? res.data.data : []
-				if(!catgFilter){
-					this.setState({ categories:dataCatgs })
-				}else{
-					dataCatgs.map(_=>{
-						if(_.name == catgFilter || _.name.indexOf(catgFilter) > -1){
-							let CatgNew = getAttr(_.childCategory) == 'Array' ? _.childCategory : []
-							this.setState({ categories:CatgNew })
-							ioInput.catg = storeCatgId = _.id
-							ioOuter(ioInput)
-						}
-					})
-				}
+				this.setState({categories:dataCatgs})
+				ioInput.catg  = dataCatgs[0].ActivityCategoryID
+				ioOuter(ioInput)
 			}
 		})
 	} 
@@ -69,7 +60,7 @@ export default class CatgNew extends React.Component {
 				<div className="e-catg-by-store2-box" style={filterFlex}>
 					{ 
 						useCatgs.map((_, i) => {
-							return <div key={i} onClick={() => this.selectVal(_.id)}><OneNewActive styleObj={styleObj} ioInput={ioInput} data={data} item={_} type={'CatgNew'} /></div>
+							return <div key={i} onClick={() => this.selectVal(_.ActivityCategoryID)}><OneNewActive styleObj={styleObj} ioInput={ioInput} data={data} item={_} type={'CatgNew'} /></div>
 						})
 					 }
 				</div>
