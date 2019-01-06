@@ -72,6 +72,8 @@
   },
   "dependencies": {
     "animate.css": "^3.6.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
     "classnames": "^2.2.5",
     "core-js": "^2.5.5",
     "iscroll": "^5.2.0",

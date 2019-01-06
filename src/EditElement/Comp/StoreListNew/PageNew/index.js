@@ -8,7 +8,13 @@ export default class PageNew extends React.Component {
 	constructor(props) {
 		super(props)
 	}
-
+	shouldComponentUpdate(nextProps,nextState){
+		if(!nextProps.ioInput.catg){
+			return false
+		}else{ 
+			return  true
+		}
+	} 
 	render() {
 		let { data,ioInput,shopsInfo } = this.props,
 			page = shopsInfo.page,

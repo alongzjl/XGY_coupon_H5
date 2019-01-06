@@ -23,6 +23,7 @@ class EditElementCommon extends React.Component {
   		let toPage =  configData.pageContent[0];
   		if(this.props.path == 'coupon'){
   			toPage =  configData.pageContent[0];
+  			window.routerTo = this.props.query ? this.props.query.router : '';
   		}else if(this.props.path == 'details'){
   			toPage =  configData.pageContent[1];
   		}

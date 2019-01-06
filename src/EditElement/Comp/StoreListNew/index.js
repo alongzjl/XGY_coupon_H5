@@ -21,29 +21,24 @@ class StoreListNew extends React.Component {
 		first:true,
 		Update:false,
 		shopsInfo:{
-			data:[[1,2,3,4,5,6,7,8,9,10,11,12]],
+			data:[[1,2,3,4,5,6,7,8,9]],
 			page:{totalPage:1}
 		} 
 	};         
 	componentWillMount() {  
 		let { data,query } = this.props,
-			content = data.data.content,
-			size = data.data.content.size || 12;
+			size = data.data.content.size || 9;
 		this.state.paramsData.size = size 
 		let paramsData = this.state.paramsData
 		this.getDataPost(paramsData,size);
 	};
-	componentDidMount() { 
- 		let { data } = this.props,
- 		content = data.data.content;
- 		let size = content.size || 9;
- 	}      
 	//请求在线数据
 	getDataPost = (paramsData,size) => {
 		this.changeShops(paramsData,size)
 	} 
 	//切换筛选时拉数据
 	changeShops = (paramsData,size) => {
+		if(!paramsData.catg) return
 		storeListMake(paramsData,size).then(res=>{
 			if(res.msg == 'success'){
 					this.setState({
@@ -102,37 +97,13 @@ function storeListMake(paramsData,size){
 	return new Promise((resolve, reject) => {
 		Fetch.default.postJSON(Url,{
 			mallId:configData.mallId,
-			promotionCategoryId:paramsData.catg
+			promotionCategoryId:paramsData.catg,
+			pageSize:1000
 		}).then(res=>{
 			if (res.meta.errno == 0) {
 				let list = res.result ? res.result.data : [];
-				list = [{
-					Name:'alongfsf',
-					Photo:'http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031616585257/1901031616585234.png',
-					EndTime:'2018/12/31 11:28:43',
-					StartTime:'2018/12/31 11:28:43',
-					SubTitle:'防守打法接收到福建省的路口附近 反倒是减肥is 发不打算减肥'
-				},{
-					Name:'alongfsf',
-					Photo:'http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031616585257/1901031616585234.png',
-					EndTime:'2018/12/31 11:28:43',
-					StartTime:'2018/12/31 11:28:43',
-					SubTitle:'防守打法接收到福建省的路口附近 反倒是减肥is 发不打算减肥'
-				},{
-					Name:'alongfsf',
-					Photo:'http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031616585257/1901031616585234.png',
-					EndTime:'2018/12/31 11:28:43',
-					StartTime:'2018/12/31 11:28:43',
-					SubTitle:'防守打法接收到福建省的路口附近 反倒是减肥is 发不打算减肥'
-				},{
-					Name:'alongfsf',
-					Photo:'http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031616585257/1901031616585234.png',
-					EndTime:'2018/12/31 11:28:43',
-					StartTime:'2018/12/31 11:28:43',
-					SubTitle:'防守打法接收到福建省的路口附近 反倒是减肥is 发不打算减肥'
-				}]
-				let page =/* res.result ? res.result.page : */{totalPage:1,totalCount:4};
-				let newArr = ArrMake(size,page,paramsData,list);
+				let page ={totalPage:Math.ceil(list.length/size),totalCount:list.length};
+				let newArr = ArrMake(size,page,paramsData,list.slice((paramsData.currentPage-1)*size,paramsData.currentPage*size));
 				resolve({msg:'success',data:newArr}) 
 			}else{
 				resolve({msg:'fail',data:''})  

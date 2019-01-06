@@ -19,16 +19,16 @@ class ListByStoreNew extends React.Component {
 		random:parseInt(Math.random()*1e5)
 	}
 	componentDidMount() {
-		this.initSwiper(this.props,this.state.random)
+		this.props.ioInput.catg ? this.initSwiper(this.props,this.state.random) : null
 	}
 	componentWillReceiveProps(nextProps) {
 		if(!nextProps.ioInput.changePage){
 			const random = parseInt(Math.random()*1e5)
-			!nextProps.ioInput.clickStore ? this.setState({random:random},()=>{this.initSwiper(nextProps,random)}) : null
+			!nextProps.ioInput.clickStore&&nextProps.ioInput.catg ? this.setState({random:random},()=>{this.initSwiper(nextProps,random)}) : null
 		} 
 	} 
 	shouldComponentUpdate(nextProps,nextState){
-		if(nextProps.ioInput.clickStore){
+		if(nextProps.ioInput.clickStore || !nextProps.ioInput.catg){
 			return false
 		}else{ 
 			return nextProps.ioInput.changePage ?  nextProps.storeUpdate : true
@@ -43,7 +43,7 @@ class ListByStoreNew extends React.Component {
 			direction : 'horizontal',
 			speed:1000,
 			freeMode:false,
-			touchRatio : 0.3,//触摸变慢 
+			//touchRatio : 0.8,//触摸变慢 
 			on:{
 				slideNextTransitionStart:function(){
 					ioInput.currentPage += 1;
@@ -61,11 +61,10 @@ class ListByStoreNew extends React.Component {
 		this.myStoreSwiper = new Swiper(`.swiper-container_store_${random}`, swiperOptions)
 	}
 	toDetails = item => {
-		debugger
 		 hashHistory.push({
                 pathname: `/details`,
                 query: { 
-                    detail: item.PromotionID, 
+                    PromotionID: item.PromotionID
                 }   
             });  
 	}      
@@ -92,13 +91,13 @@ function RenderSwiperNew({ props,ioInput, shops,random,toDetails }) {
 								shops.data.map((item,index)=>{
 									if(ioInput.currentPage == (index+1)){
 										return (<div className="swiper-slide" key={index}>{
-											type_ani == 1 ? <RenderDomNew props={props} list={item} toDetails={toDetails} classAni={classAni} /> :
-											<RenderDomTwoNew props={props} list={item} toDetails={toDetails} classAni={classAni} />
+											type_ani == 1 ? <RenderDomTwoNew props={props} list={item} toDetails={toDetails} classAni={classAni} /> :
+											<RenderDomNew props={props} list={item} toDetails={toDetails} classAni={classAni} />
 										}</div>)
 									}else{
 										return (<div className="swiper-slide" key={index}>{
-											type_ani == 1 ? <RenderDomNew props={props} list={item} toDetails={toDetails} opacity={0} classAni={'noRY'} /> :
-											<RenderDomTwoNew props={props} list={item} toDetails={toDetails} opacity={0} classAni={'noRY'} />
+											type_ani == 1 ? <RenderDomTwoNew props={props} list={item} toDetails={toDetails} opacity={0} classAni={'noRY'} /> :
+											<RenderDomNew props={props} list={item} toDetails={toDetails} opacity={0} classAni={'noRY'} />
 										}</div>)
 									}
 								})
@@ -140,21 +139,17 @@ function RenderDomNew({ props, list,toDetails,opacity,classAni }) {
 }  
 //动画二
 function RenderDomTwoNew({ props, list,toDetails,opacity,classAni }) {
-	let end = e =>{
-		e.target.style.opacity = 1;
-	}
-	let defaultStyle = cssColorFormat(props, 'filter'),
-		animationStyle = {"animationDuration":"0.5s","animationDelay":"0s","animationIterationCount":1};
-	defaultStyle = {...defaultStyle,...animationStyle};
+	
+	let defaultStyle = cssColorFormat(props, 'filter')
 
 	let node = list != 0 && list.length>0 ? list.map((_, i) => {
+		if(getAttr(_) == 'Number') return false
 		return ( 
 			<div
 				key={i}
-				style={{...defaultStyle,opacity:opacity,animationDelay:`${0.1*i}s`}}
+				style={defaultStyle}
 				className={`ep-item ${classAni}`} 
 				onClick={()=>{toDetails(_)}}
-				onAnimationEnd={e=>{end(e)}}
 			> 
 				<Layout itemList={_} data={props.data} styleObj={{}} refresh={true} type={"NewStore"} />
 			</div>  

@@ -3,25 +3,104 @@
        "api":"http://192.168.1.206/easy-smart-web/smartPreferential"
     },
     "qa":{ 
-       "api":"http://224.rongyi.com/easy-smart-web/mallShop"//  http://52.internal.rongyi.com  //http://fe1.rongyi.com:8224
+       "api":"http://224.rongyi.com/easy-smart-web/smartPreferential"//  http://52.internal.rongyi.com  //http://fe1.rongyi.com:8224
     },         
     "v4":{     
-      "api":"http://api.v4.rongyi.com/easy-smart-web/mallShop"
+      "api":"http://api.v4.rongyi.com/easy-smart-web/smartPreferential"
     }, 
     "v8":{ 
-      "api":"http://api.rongyiguang.com/easy-smart-web/mallShop"
+      "api":"http://api.rongyiguang.com/easy-smart-web/smartPreferential"
     }
   }
    	//const mallId = '5bf50b84130b38000b969e3b'	// online
-   	 //const mallId = "5330fe6521232ffbd500010b"  //v4
+   	 //const mallId = "5bf50b84130b38000b969e3b"  //v4
 	 const mallId = '5bf50b84130b38000b969e3b'	// dev
-	//const mallId = '5330fe6521232ffbd500010b'	// qa
+	//const mallId = '5bf50b84130b38000b969e3b'	// qa
  window.configData =  {
 	"resourceBasePath": "",
-	"RYPostUrl":API_url.dev,
+	"RYPostUrl":API_url.v8,
  	"mallId":mallId,
  	"pageContent": []
  }
+
+const formatMap = {
+	margin:       1,
+	padding:      1,
+	borderRadius: 1,
+	boxShadow:    1,
+	textShadow:   1,
+	transform:    1,
+	border:       1,
+	borderTop:    1,
+	borderRight:  1,
+	borderBottom: 1,
+	borderLeft:   1
+}
+const formatPxMap = {
+	fontSize:          1,
+	width:             1,
+	height:            1,
+	paddingTop:        1,
+	paddingRight:      1,
+	paddingBottom:     1,
+	paddingLeft:       1,
+	top:               1,
+	right:             1,
+	bottom:            1,
+	left:              1,
+	marginTop:         1,
+	marginRight:       1,
+	marginBottom:      1,
+	marginLeft:        1,
+	borderWidth:       1,
+	borderTopWidth:    1,
+	borderRightWidth:  1,
+	borderBottomWidth: 1,
+	borderLeftWidth:   1,
+	lineHeight:        1
+}
+function formatEle(obj) {
+	let { type, data } = obj
+	if (type === 'base') {
+		formatStyle(data)
+		delete obj.auth
+	} else if (type === 'advanced') {
+		data.layout = cssFormatByTerm(data.layout)
+		data.components&&data.components.map(_ => formatEle(_))
+	} else if (type === 'layout') {
+		formatStyle(data)
+		data.componentLayout&&data.componentLayout.map(_ => formatEle(_))
+	}
+}
+function formatStyle(data) {
+	let { style, layout } = data
+	Object.keys(data.style).map(_ => style[_] = cssFormatByTerm(style[_]))
+	data.layout = cssFormatByTerm(layout)
+}
+function cssFormatByTerm(obj) {
+	Object.keys(obj).map(p => {
+		let v = obj[p]
+		if (formatMap[p]) {
+			 Object.keys(v).map(_ => {
+				let w  = v[_]
+				const nowData =  getAttr(w) === 'Number'? (w *2 + 'px'): w
+				obj[p][_] = nowData
+			})
+		}
+		else if (formatPxMap[p]) {
+			obj[p] = v * 2 + 'px'
+		}
+	})
+	var newO = {}
+	var newObj = Object.keys(obj).sort()
+	newObj.map(_ => {
+		newO[_] = obj[_]
+	})
+	return newO
+}
+function formatPage(obj) {
+	obj.elements.map(_ => formatEle(_))
+}
 
 const dataChnage = () => {
 	const originData ={
@@ -716,7 +795,7 @@ const dataChnage = () => {
 			                  "text": {
 			                    "textAlign": "left",
 			                    "fontSize": 8,
-			                    "lineHeight": 19,
+			                    "lineHeight": 9,
 			                    "transform": {
 			                      "rotate": 0
 			                    },
@@ -773,10 +852,8 @@ const dataChnage = () => {
 			                  "top": 85,
 			                  "left": 87,
 			                  "width": 200,
-			                  "height": 19,
-			                  "transform": "scale(.66)",
-    							"transformOrigin": "top left"
-			                },
+			                  "height": 9
+			                 },
 			                "content": {
 			                  "bind": "berthNumber",
 			                  "router": {}
@@ -837,7 +914,7 @@ const dataChnage = () => {
 			                  "text": {
 			                    "textAlign": "center",
 			                    "fontSize": 10,
-			                    "lineHeight": 18,
+			                    "lineHeight": 9,
 			                    "transform": {
 			                      "rotate": 0
 			                    },
@@ -900,9 +977,7 @@ const dataChnage = () => {
 			                  "top": 50.5,
 			                  "left": 87,
 			                  "width": 146,
-			                  "height": 36,
-			                  "transform": "scale(.83)",
-    							"transformOrigin": "top left"
+			                  "height": 18
 			                },
 			                "content": {
 			                  "bind": "SubTitle",
@@ -1160,11 +1235,11 @@ const dataChnage = () => {
 			                      "rotate": 0
 			                    },
 			                    "opacity": 1,
-			                    "borderRadius": {
-			                      "topLeft": 5,
-			                      "topRight": 5,
-			                      "bottomRight": 5,
-			                      "bottomLeft": 5
+			                    "borderRadius": { 
+			                      "topLeft": "50%",
+			                      "topRight": "50%",
+			                      "bottomRight": "50%",
+			                      "bottomLeft": "50%"
 			                    },
 			                    "backgroundColor": {
 			                      "type": "custom",
@@ -1356,6 +1431,72 @@ const dataChnage = () => {
 			        "fture": {
 			          "body": false
 			        }
+			      }
+			    },{
+			      "name": "picture",
+			      "type": "base",
+			      "data": {
+			        "style": {
+			          "image": {
+			            "transform": {
+			              "rotate": 0
+			            },
+			            "opacity": 1,
+			            "borderRadius": {
+			              "topLeft": 0,
+			              "topRight": 0,
+			              "bottomRight": 0,
+			              "bottomLeft": 0
+			            }
+			          }
+			        },
+			        "layout": {
+			          "position": "absolute",
+			          "top": 460,
+			          "left": 50,
+			          "width": 140,
+			          "height": 50,
+			          "lockAspectRatio": true
+			        },
+			        "content": {
+			          "img": {
+			            "type": "custom",
+			            "img": "http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031044151854/1901031044151834.png"
+			          },
+			          "router": "mall"
+			        },
+			        "animation": {
+			          "className": "",
+			          "direction": "",
+			          "delay": 0,
+			          "duration": 1,
+			          "iterationCount": 1
+			        }
+			      },
+			      "styleList": {
+			        "idx": 0
+			      },
+			      "feature": {},
+			      "auth": {
+			        "style": {
+			          "image": {
+			            "transform": false,
+			            "opacity": false,
+			            "borderRadius": false
+			          }
+			        },
+			        "content": {
+			          "img": false,
+			          "router": false
+			        },
+			        "animation": {
+			          "className": false,
+			          "direction": false,
+			          "delay": false,
+			          "duration": false,
+			          "iterationCount": false
+			        },
+			        "fture": {}
 			      }
 			    }],
 			    "topNav": {},
@@ -2352,14 +2493,7 @@ const dataChnage = () => {
 			            "type": "custom",
 			            "img": "http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031044151854/1901031044151834.png"
 			          },
-			          "router": {
-			            "param": [{
-			              "type": "",
-			              "value": ""
-			            }],
-			            "url": "coupon",
-			            "type": "router"
-			          }
+			           "router": "coupon"
 			        },
 			        "animation": {
 			          "className": "",
@@ -2425,6 +2559,7 @@ const dataChnage = () => {
 			    }
 		  }
 		};
+	Object.keys(originData).map(_ => formatPage(originData[_]))
 	let newArr = [];
 	Object.keys(originData).map(item=>{
 		const obj = originData[item];

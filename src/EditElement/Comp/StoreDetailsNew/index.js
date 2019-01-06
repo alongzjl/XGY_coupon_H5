@@ -24,19 +24,11 @@ class StoreDetailsNew extends React.Component {
 	//请求数据
 	postData = (Url,PromotionID) => {
 		postJSON(Url,{mallId:configData.mallId,promotionId:PromotionID}).then(res=>{
-			//if(res.msg == 'success'){
+			if(res.msg == 'success'){
 				let shopDetais = res.data ? res.data.data : {}
-				shopDetais = {
-					Name:'alongfsf',
-					Photo:'http://rongyi.b0.upaiyun.com/system/smart/test/file/resourcePic/1901031616585257/1901031616585234.png',
-					EndTime:'2018/12/31 11:28:43',
-					StartTime:'2018/12/31 11:28:43',
-					SubTitle:'防守打法接收到福建省的路口附近 反倒是减肥is 发不打算减肥',
-					Article:'<h1>fsdfsdfsdfsd发送到</h1>'
-				}
 				this.setState({shopDetais:shopDetais})
 				
-			//}
+			}
 		})
 	} 
 	render() { 

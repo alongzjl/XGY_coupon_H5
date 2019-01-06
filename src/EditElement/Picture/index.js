@@ -16,9 +16,22 @@ class Picture extends React.Component {
 		random:`img_${parseInt(Math.random()*1e5)}`
 	}
 	toPage = () => {
-		 hashHistory.push({
-                pathname: `/coupon`
-            });  
+		let { data } = this.props, 
+			router = data.data.content.router
+		if(router == 'coupon'){
+			 hashHistory.push({
+                pathname: `/coupon`,
+                query:{router:routerTo}
+            }); 
+		}else if(router == 'mall'){
+			if (window.parent && window.postMessage) {
+				window.parent.postMessage({
+					type:  'toDetails',
+					value: {router:routerTo,details:'coupon'}
+				}, '*')
+			}
+		}	
+		 
 	}; 
 	   
 	render() {
@@ -28,7 +41,9 @@ class Picture extends React.Component {
 			
 		return (
 			<div id={this.state.random} className="e-picture" style={cssColorFormat(this.props, 'image')} onClick={this.toPage} >
-				<img src={ picture } />
+				{
+					picture ? <img src={ picture } /> : null
+				}
 			</div>  
 		)
 	} 
